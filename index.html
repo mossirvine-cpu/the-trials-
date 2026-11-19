@@ -898,6 +898,24 @@ const ART = {
     "KAKYWWWWWWWWYKAK",
     "KKKKKKKKKKKKKKKK",
   ],
+  gate: [
+    "KKKKKKKKKKKKKKKK",
+    "KSDKKSDKKSDKKSDK",
+    "KSDK.SDK.SDK.SDK",
+    "KSDK.SDK.SDK.SDK",
+    "KKKKKKKKKKKKKKKK",
+    "KSSSSSSSSSSSSSDK",
+    "KKKKKKKKKKKKKKKK",
+    "KSDK.SDK.SDK.SDK",
+    "KSDK.SDK.SDK.SDK",
+    "KSDK.SDK.SDK.SDK",
+    "KKKKKKKKKKKKKKKK",
+    "KSSSSSSSSSSSSSDK",
+    "KKKKKKKKKKKKKKKK",
+    "KSDK.SDK.SDK.SDK",
+    ".SD...D..SD...D.",
+    ".K.K.K.K.K.K.K.K",
+  ],
   torch_a: [
     ".......Y........",
     "......YOY.......",
@@ -1049,7 +1067,7 @@ const BOSSES = [
 const SCALE = 3;          // each art pixel becomes 3x3 screen pixels
 const T = 16 * SCALE;     // one tile on screen = 48 pixels
 const MW = 60, MH = 42;   // dungeon size in tiles
-const WALL = 0, FLOOR = 1, CRACK = 2;
+const WALL = 0, FLOOR = 1, CRACK = 2, GATE = 3;
 const MAX_WEAPONS = 6;
 const FONT = '"Press Start 2P", monospace';
 
@@ -1233,6 +1251,9 @@ let map, hidden, secrets, rooms, startRoom, bossRoom, mapCanvas, mapCtx;
 let player, monsters = [], items = [], chests = [], projectiles = [], particles = [], floaters = [], torches = [], companions = [];
 let shopObj = null, shopStock = [], shopMsg = '', shopMsgT = 0;
 let exitObj = null, boss = null;
+// boss arena: 'waiting' = boss not here yet, 'closing' = doors just slammed,
+// 'fight' = boss is out, 'done' = boss beaten
+let arena = 'waiting', arenaT = 0, gates = [];
 let cam = { x: 0, y: 0 }, shake = 0;
 let banner = { text: '', t: 0 };
 let introT = 0, deadT = 0, endT = 0, lostCoins = 0, time = 0;
@@ -1293,7 +1314,7 @@ function genDungeon(d) {
   map = new Uint8Array(MW * MH);
   hidden = new Set(); secrets = {};
   monsters = []; items = []; chests = []; projectiles = []; particles = []; floaters = []; torches = [];
-  exitObj = null; boss = null;
+  exitObj = null; boss = null; arena = 'waiting'; arenaT = 0; gates = [];
 
   startRoom = { x: R(2, 5), y: R(3, MH - 12), w: 10, h: 8 };
   bossRoom = { x: MW - 17, y: R(3, MH - 15), w: 15, h: 12 };
@@ -1354,7 +1375,11 @@ function genDungeon(d) {
   for (const r of mids) if (rng() < 0.6) trySecret(r, R, rng);
 
   // the boss
-  spawnBoss(d);
+  // the boss waits until you walk into its arena (see updateArena)
+  for (let y = bossRoom.y - 1; y <= bossRoom.y + bossRoom.h; y++) for (let x = bossRoom.x - 1; x <= bossRoom.x + bossRoom.w; x++) {
+    const edge = y === bossRoom.y - 1 || y === bossRoom.y + bossRoom.h || x === bossRoom.x - 1 || x === bossRoom.x + bossRoom.w;
+    if (edge && tile(x, y) === FLOOR) gates.push(y * MW + x);
+  }
 
   // torches on walls
   for (let y = 1; y < MH - 1; y++) for (let x = 1; x < MW - 1; x++) {
@@ -1404,6 +1429,11 @@ function trySecret(r, R, rng) {
 function hash(x, y) { let h = (x * 374761393 + y * 668265263) | 0; h = (h ^ (h >>> 13)) * 1274126177; return (h ^ (h >>> 16)) >>> 0; }
 function renderTile(tx, ty) {
   const px = tx * T, py = ty * T;
+  if (tile(tx, ty) === GATE) {
+    mapCtx.drawImage(spr('floor_a').r, px, py, T, T);
+    mapCtx.drawImage(spr('gate').r, px, py, T, T);
+    return;
+  }
   mapCtx.fillStyle = '#080a07';
   mapCtx.fillRect(px, py, T, T);
   const h = hash(tx, ty);
@@ -1606,7 +1636,39 @@ function killMonster(m) {
   if (Math.random() < 0.07) spawnItem('scrap', m.x, m.y);
   if (Math.random() < 0.04) spawnItem('weapon', m.x, m.y, { wkey: randomWeaponKey(tierFor(d)) });
 }
+// ---------- the boss arena ----------
+function setGates(closed) {
+  for (const i of gates) map[i] = closed ? GATE : FLOOR;
+  for (const i of gates) {
+    const gx = i % MW, gy = Math.floor(i / MW);
+    for (let y = gy - 1; y <= gy + 1; y++) for (let x = gx - 1; x <= gx + 1; x++) if (x >= 0 && y >= 0 && x < MW && y < MH) renderTile(x, y);
+  }
+}
+function updateArena(dt) {
+  if (arena === 'waiting') {
+    const r = bossRoom, m = 0.7 * T;
+    const inside = player.x > r.x * T + m && player.x < (r.x + r.w) * T - m && player.y > r.y * T + m && player.y < (r.y + r.h) * T - m;
+    if (!inside) return;
+    arena = 'closing'; arenaT = 1.2;
+    setGates(true);
+    shake = 12; SFX.crumble();
+    later(() => SFX.crumble(), 150);
+    showBanner('The doors slam shut behind you...', 2);
+    // buddies come in with you
+    for (const c of companions) if (!inRoom(c, bossRoom)) { c.x = player.x; c.y = player.y; }
+    for (const i of gates) for (let k = 0; k < 6; k++) particles.push({ x: (i % MW + 0.5) * T, y: (Math.floor(i / MW) + 0.5) * T, vx: rnd(-120, 120), vy: rnd(-120, 120), life: rnd(0.3, 0.7), color: pick(['#6e7468', '#8c9286', '#c3ccd6']), s: ri(4, 7) });
+  } else if (arena === 'closing') {
+    arenaT -= dt;
+    if (arenaT > 0) return;
+    arena = 'fight';
+    spawnBoss(dungeon);
+    const cx = boss.x, cy = boss.y;
+    for (let k = 0; k < 50; k++) particles.push({ x: cx, y: cy, vx: rnd(-320, 320), vy: rnd(-320, 320), life: rnd(0.4, 1), color: pick([monsterColor(boss), '#1b1b24', '#ffffff']), s: ri(5, 10) });
+  }
+}
 function bossDefeated(m) {
+  arena = 'done';
+  setGates(false);
   shake = 16;
   SFX.victory();
   const cx = (bossRoom.x + bossRoom.w / 2) * T, cy = (bossRoom.y + bossRoom.h / 2) * T;
@@ -1830,9 +1892,11 @@ function respawn() {
   player.y = (startRoom.y + startRoom.h - 1.5) * T;
   player.inv = 1.5; player.kbx = player.kby = 0; player.speedT = player.strT = 0;
   projectiles = [];
-  if (boss && !boss.dead) {
-    boss.hp = boss.maxHp; boss.active = false; boss.charge = 0;
-    boss.x = (bossRoom.x + bossRoom.w / 2) * T; boss.y = (bossRoom.y + bossRoom.h / 2) * T;
+  if (arena === 'closing' || arena === 'fight') {
+    // the boss goes back into hiding and the doors open again
+    monsters = monsters.filter(m => !m.boss && !inRoom(m, bossRoom));
+    boss = null; arena = 'waiting';
+    setGates(false);
   }
   for (const c of companions) { c.x = player.x; c.y = player.y; }
   state = 'play';
@@ -2083,6 +2147,7 @@ function updatePlay(dt) {
   updateItems(dt);
   updateParticles(dt);
 
+  updateArena(dt);
   if (exitObj && overlap(player, exitObj)) {
     if (exitObj.kind === 'door') { state = 'ending'; endT = 0; musicStep = 0; removeKey('trials10_save'); SFX.victory(); }
     else nextDungeon();
