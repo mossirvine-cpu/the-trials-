@@ -1152,6 +1152,442 @@ function loadJSON(k) { try { const v = localStorage.getItem(k); return v ? JSON.
 function saveJSON(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
 function removeKey(k) { try { localStorage.removeItem(k); } catch (e) {} }
 
+// ---------- MOSSY DUNGEON TEXTURE (from our own pixel drawing!) ----------
+// Each wall and floor tile is a 16x16 piece cut from the mossy dungeon
+// drawing. The game picks a different piece for each tile so it looks natural.
+const MOSSY_PAL = {
+  'A': '#575757', // wall stone
+  'N': '#464646', // mortar
+  'K': '#292829', // shadow at the bottom of the wall
+  'L': '#949494', // floor stone
+  'G': '#185e2c', // moss
+  'g': '#125425', // dark moss
+  'P': '#c38be8', // flower
+  'p': '#9e69c2', // flower stem
+  'q': '#6f3198', // dark flower
+  'Y': '#b3ff00', // flower middle
+};
+const MOSSY = {
+  walls: [
+    [
+      "NAAAAAAAAANAAAAA",
+      "NAAAAAAAAANAAAAA",
+      "NAAAAAAAAANAAAAA",
+      "NAAAAAAAAANAAAAA",
+      "NAAAAAAAAANAAAAA",
+      "NAAAAAAAAANAAAAA",
+      "NAgggAAAAGgAAAgA",
+      "NggNNgNNNNgggggN",
+      "ggAAAAggAAAAAAGA",
+      "NAAAAAAAAAAAAAAA",
+      "NAAAAAAAAAAAAAAA",
+      "NAAAAAAAAAAAAAAA",
+      "NAAAAAAAAAAAAAAA",
+      "NAAAAAAAAAAAAAAA",
+      "NAAAAAAAAAAAAAAA",
+      "NKKKKKKKKKKKKKKK",
+    ],
+    [
+      "AAAAAAAAAANAAAAG",
+      "AAAAAAAAAANAAAAA",
+      "AAAAAgAAAANAAAAA",
+      "AAAAAGAAAANAAAAA",
+      "PgAgAGGgAANAAAAA",
+      "qAGGGgGGGgNAAAAA",
+      "AgGGgGGGGggAAGAA",
+      "gGGGGgGgGGgAPGAG",
+      "GGGNGGGGGgNNqGGN",
+      "gggAAGGGGGAAAAAA",
+      "ANAAAgGggAAAAAAA",
+      "ANAAAAAAAAAAAAAA",
+      "AANAAAPYPAAAAAAA",
+      "AANAAAAPAAAAAAAA",
+      "AANAAAApAAAAAAAA",
+      "KKKKKKKKKKKKKKKK",
+    ],
+    [
+      "GAAAAAAAAAAAAAAA",
+      "AAGGGAGAAGAAAAAA",
+      "AAAAAAAGGGAAAAAA",
+      "AAAAAAAAAAAAAAAA",
+      "AAAAAAAAAAAAAAAA",
+      "AAAAAAAAAgAAgPAA",
+      "AAAPYPAAAAgggqgg",
+      "AAAAPAAggGggggPg",
+      "GGGGppGgNGGggGqG",
+      "AGGGAAAAAAAgAAgG",
+      "AAANAAAAAAPPAPPA",
+      "AAANAAAAAAAAPAAA",
+      "AAAANAAAAAAAAAAA",
+      "AAAANAAAAAAAAAAA",
+      "AAAANAAAAAAAAAAA",
+      "KKKKKKKKKKKKKKKK",
+    ],
+    [
+      "ANAAAAAAAAAAAANA",
+      "ANAAAAAAAAAAAANA",
+      "NAAAAAAAAAAAAAAN",
+      "NAAAAAAAAAAAAAAN",
+      "NAAAAAAAAAAAAAAN",
+      "NAAAAAAAAAAAAAAN",
+      "gAAAAAAAAAAAAAAA",
+      "GAAAAAAAAAAAAAAA",
+      "GGgGGGAAAAAAAAAA",
+      "gggGGGGGNNNNNNNN",
+      "AAAAANAAAAAAAAAA",
+      "AAAAANAAAAAAAAAA",
+      "AAAAAANAAAAAAAAA",
+      "AAAAAANAAAAAAAAA",
+      "AAAAAANAAAAAAAAA",
+      "KKKKKKKKKKKKKKKK",
+    ],
+    [
+      "AAAAAAAAAAAAAAGG",
+      "AAAAAAAAAAAAAGGg",
+      "AAAAAAAAAAAAAAAN",
+      "AAAAAAAAAAAAAAAN",
+      "AAAAAAAAAAAAAANA",
+      "AAAAAAAAAAAAAANA",
+      "NAAAAAAAAAAAAANA",
+      "NAAAAAAAAAAAAANA",
+      "NNNNNNNNNNNNNNNN",
+      "AAAAGANAAAAAAAAA",
+      "AAAAGANAAAAAAAAA",
+      "AAAAGANAAAAAAAAA",
+      "AAAAAGgGGAAAAAAA",
+      "AAAAAANAAAAAAAAA",
+      "AAAAAANAAAAAAAAA",
+      "KKKKKKKKKKKKKKKK",
+    ],
+    [
+      "GgAAAAAAAAAAAAAN",
+      "AAAAAAAAAAAAAAAN",
+      "AAAAAAAAAAAAAAAA",
+      "AAAAAAAAAAGAAAAA",
+      "AAAAAAAAAAAAAAAA",
+      "AAAAAAAAAAGAAAAA",
+      "AAAAAAAAAGGAAAAA",
+      "AAAAAAAAAANNNNNN",
+      "NNNNNNNNNNAAAAAA",
+      "AAAAAANAAAAAAAAA",
+      "AAAAAANAAAAAAAAA",
+      "AAAAAANAAAAAAAAA",
+      "AAAAAAANAAAAAAAA",
+      "AAAAAAANAAAAAAAA",
+      "AAAAAAANAAAAAAAA",
+      "KKKKKKKKKKKKKKKK",
+    ],
+    [
+      "AAAAAAAAAAAAAAAA",
+      "AAAAAAAAAAAAAAAA",
+      "NAAAAAAAAAAAAAAA",
+      "NAAAAAAAAAAAAAAA",
+      "NAAAAAAAAAAAggAA",
+      "ANAAAAAAGAAAGGGG",
+      "ANAGGgAAGAAggAAA",
+      "NNNNGggPGNGGGGNG",
+      "AAAAGGGpGAANAgGP",
+      "AAAAAAAAAAANAGGp",
+      "AAAAAAAAAAANAAAA",
+      "AAAAAAAAAAANAAAA",
+      "AAAAAAAAAAANAAAA",
+      "AAAAAAAAAAANAAAA",
+      "AAAAAAAAAAANAAAA",
+      "KKKKKKKKKKKKKKKK",
+    ],
+    [
+      "AAAAAAAAAAAAAAAA",
+      "AAAAAANAAAAAAAAA",
+      "AAAAAANAAAAAAAAA",
+      "AAAGAANAAAAAAAAA",
+      "AAAAGGNGAAAAAAAA",
+      "AGPGAGNGGGAAAAAA",
+      "AGGPggGAGgPgGAAA",
+      "GGgpGGgggGpggGGG",
+      "GgGNGgggGGgGGGgg",
+      "pGgGAgAGGAAAAAAA",
+      "gGgGGgGAAAAAAAAA",
+      "AAGGGgGAAAAAAAAG",
+      "AAGGgGGAAAAAAAAA",
+      "AAAAAGAAAAAAAAAA",
+      "AAAAAAAAAAAAAAAA",
+      "KKKKKKKKKKKKKKKK",
+    ],
+    [
+      "AAAAAANAAAAAAAAA",
+      "AAAAAANAAAAAAAAA",
+      "AAAAAAAGGAAGGGAA",
+      "AAAAAAANAGGGGAAA",
+      "AAAAAAANAAAAAAAA",
+      "AAAAAAAANAAAAAAA",
+      "AAAAAAAANAAAAAAA",
+      "AAGAAAAAANAAAAAA",
+      "ggGGGGGAANAAAAAA",
+      "NAAGAggggggGNNGG",
+      "NAAAAAAAAAAAAAAA",
+      "GGgAAAAAAAAAAAAA",
+      "NGGGAAAAAAAAAAAA",
+      "NAgGAAAAAAAAAAAA",
+      "NAAGAAAAAAAAAAAA",
+      "KKKKKKKKKKKKKKKK",
+    ],
+    [
+      "AAAAAAAAAAAAAAAA",
+      "AAAAAAAAAAAAAAAA",
+      "AAAAAAAAAAAAAAAA",
+      "AAAAAAAAAAAAAAAA",
+      "AAAAAAAAAAAAAAAA",
+      "AAAAAAAAAAAAAAAA",
+      "AAAGAAAAAAAAAAAA",
+      "AAAGAGAAAAAAAAAA",
+      "AGGPGGGGGGGGAAGA",
+      "GGgpgGNNGGGNGNNN",
+      "NAGGgGAAAAAAAAAA",
+      "NAGggAAAAAAAAAAA",
+      "NAGAAAAAAAAAAAAA",
+      "NAAAAAAAAAAAAAAA",
+      "NAAAAAAAAAAAAAAA",
+      "KGKKKgKKKKKKKKKK",
+    ],
+    [
+      "AANAAAAAAAAAAAAA",
+      "AANAAAAAAAAAAAAA",
+      "AANAAAAAAAAAAAAA",
+      "AANAAAAAAAAAAAAA",
+      "AAANAAAAAAAAAAAA",
+      "AAANAAAAAAAAAAAA",
+      "AAANAAAAAAAAAAAA",
+      "AAAGAAAAAAAAAAAA",
+      "AAAgGGAAAGAGGGAA",
+      "NNNGGgGNGGGNNGNN",
+      "AAAGAAAAAAGGGAAA",
+      "AAPYPAAAAAAANAAA",
+      "AAAPAAAAAAANAAAA",
+      "AAApAAAAAAANAAAA",
+      "AAApAAAAAAANAAAA",
+      "KKKKKKKKKKKKKKKK",
+    ],
+    [
+      "AAANAAAAAAAAAAAA",
+      "AGgNAAAAAAAAAAAA",
+      "AAGNAAAAAAAAAAAA",
+      "AAgGAAAAAAAAAAAA",
+      "AANGAAAAAAAAAAAA",
+      "AANAAAAAAAAAAAAA",
+      "AANAAAAAAAAAAAAA",
+      "AANAAAAAAAAAAPPG",
+      "AANAAAAAGAgPGpGG",
+      "NNNNGGNGGNGpgGGA",
+      "AAAAAAAAAAAANAAA",
+      "AAAAAAAAAAAGGAAA",
+      "AAAAAAAAAAAANAAA",
+      "AAAAAAAAAAAANAAA",
+      "AAAAgAAGGGGGNAAA",
+      "KggGgGGKKGgKKKKK",
+    ],
+    [
+      "AAAAAANAAAAAAAAA",
+      "AAAAAANAAAAAAAAA",
+      "AAAAAANAAAAAAAAA",
+      "AAAAAANAAAAAAAAA",
+      "AAAAANAAAAAAAAAA",
+      "AAAAANAAAAAAAAAA",
+      "AAAAANAAAAAAAAAA",
+      "AAAAANAAAAAAAAAA",
+      "NNNNNNNNNNNNGGGG",
+      "AAPYPAAAAAAAANAG",
+      "AAAPAAAAAAAAAANA",
+      "AAApAAAAAAAAAANA",
+      "AAAAAAAAAAGGGANA",
+      "AAAAAAAGGGPgGgGN",
+      "AGAAGAGgggpgGgGN",
+      "KKKKKGGGGggGGgKK",
+    ],
+    [
+      "AAAAAAAAANAAAAAA",
+      "AAAAAAAAANAAAAAA",
+      "AAAAAAAANAAAAAAA",
+      "AAAAAAANAAAAAAAA",
+      "AAAAAAANAAAGAAAA",
+      "AAAAAANAAAgGGGAA",
+      "AAPAAANAGAGGgGAP",
+      "GApGgGGGgGPGgGGp",
+      "GNNGNgGGGNpGggGG",
+      "GAGGgGAGAAAGggGA",
+      "AAAAAAAAAAAAAAAA",
+      "AAAAAAAAAAAAAAAA",
+      "AAAAAAAAAAAAAAAA",
+      "GGAAAAAAAAAAAAAA",
+      "AGAGAAAAAAAAAAAA",
+      "KKKKKKKKKKKKKKKK",
+    ],
+  ],
+  floors: [
+    [
+      "LLLLLLLLLLNLLLLL",
+      "LLLLLLLLLLNLLLLL",
+      "LLLLLLLLLLNLLLLL",
+      "LLLLLLLLLLNLLLLL",
+      "LLLLLLLLLLNALLLL",
+      "NNNNNNNNNNNNNNNN",
+      "LLLLLLLLLNLLLLLL",
+      "LLLLLLLLLNLLLLLL",
+      "LLLLLLLLLNLLLLAL",
+      "LLLLLLLLLNLLLLLL",
+      "NNNNNNNNNNNNNNNN",
+      "LLLLLLLLLNLLLLLL",
+      "LLLLLLLLLNLLLLLL",
+      "LLLLLLLLLNLLLLLL",
+      "LLLLLLLLLNLLLLLL",
+      "NNNNNNNNNNNNNNNN",
+    ],
+    [
+      "LLLLNLLLLLLLLLLL",
+      "LLLLNLLLLLLLLLLL",
+      "LLLLNLLLLLLLLLLL",
+      "LLLLNLLLLLLLLLLL",
+      "LLLLNLLLLLLLLLLL",
+      "NNNNNNNNNNNNNNNN",
+      "LLLLNLLLLLLLLLLN",
+      "ALLLNLLLLLLLLLLN",
+      "LLLLNLLLLLLLLLLN",
+      "LLLLNLLLLLLLLLLN",
+      "NNNNNNNNNNNNNNNN",
+      "LLLNLLLLLLLLLLLN",
+      "LLLNLLAALLLLLLLN",
+      "LLLNLLLALLLLLLLA",
+      "LLLNLLLALLLLLLLN",
+      "NNNNNNNNNNNNNNNN",
+    ],
+    [
+      "NLLLLLLLALNLLLLL",
+      "NLLLLLLLALNLLLLL",
+      "NLLLLAAALLNLLLLL",
+      "NLLLLALLLLNLLLLL",
+      "NLLLLLLLLLNLLLLL",
+      "NNNNNNNNNNNNNNNN",
+      "LLLLLLLLLLLNLLLL",
+      "LLLLLLLLLLLNLLLL",
+      "LLLLLLLLLLLNLLLL",
+      "LLLLLLLLLLLNLLLL",
+      "NNNNNNNNNNNNNNNN",
+      "LLLALLLLLLLNLLLL",
+      "LALALAAALLLNLLLL",
+      "LLLAALLALLLNLLLL",
+      "ALALLLLALLLNLLLL",
+      "NNNNNNNNNNNNNNNN",
+    ],
+    [
+      "LLLLLLLLLNLLLLLL",
+      "LLLLLLLLLNLLLLLL",
+      "LLLLLLLLLNLLLLLL",
+      "LLLLLLLLLNLLLLLL",
+      "LLLLLLLLLNLLLLLL",
+      "NNNNNNNNNNNNNNNN",
+      "LLLLLLLLNLLLLLLL",
+      "LLLLLLLLNLLLLLLL",
+      "LLLLLLLLNLLLLLLL",
+      "LLLLLLLLNLLLLLLL",
+      "NNNNNNNNNNNNNNNN",
+      "LLLLLLLNLLAAALLL",
+      "LLLLLLLNLLLLAAAL",
+      "LLLLLLLNLLLLAALA",
+      "LLLLLLLNLLLLLALL",
+      "NNNNNNNNNNNNNNNN",
+    ],
+    [
+      "LLLNLLLLLLLLLLLL",
+      "LLLNLLLLLLLLLLLL",
+      "LLLNLLLLLLLLLLLL",
+      "LLLNLLLLLLLLLLLL",
+      "LLLNLLLLLLLLLLLL",
+      "NNNNNNNNNNNNNNNN",
+      "LLLLNLLLLLLLLLLL",
+      "LLLLNLLLLLLLLLLL",
+      "LLLLNLLLLLLLLLLL",
+      "LLLLNLLLLLLLLLLL",
+      "NNNNNNNNNNLLLLLL",
+      "LLLLNLLLLLNNNNNN",
+      "ALLLNLLLLLLLLLLL",
+      "LLLLNLLLLLLLLLLL",
+      "LLLLNLLLLLLLLLLL",
+      "NNNNNNNNNNNNNNNN",
+    ],
+    [
+      "NLLLLLLLLLNLLLLL",
+      "NLLLLLLLLLNLLLLL",
+      "NLLLLLLLLLNLLLLL",
+      "NLLLLLLLLLNLLLLL",
+      "NLLLLLLLLLNLLLLL",
+      "NNNNNNNNNNNNNNNN",
+      "NLLLLLLLLLLNLLLL",
+      "NLLLLLLLLLLNLLLL",
+      "NLLLLLLLLLLNLLLL",
+      "NLLLLLLLLLLNLLLA",
+      "NLLLLLLLLLLNLLAA",
+      "NNNNNNNNNNNNNNNN",
+      "NLLLLLLLLLLLNLLL",
+      "NLLLLLLLLLLLNLLL",
+      "NLLLLLLLLLLLNLLL",
+      "NNNNNNNNNNNNNNNN",
+    ],
+    [
+      "LLLLLLLLLNLLLLLL",
+      "LLLLLLLLLNLLALLL",
+      "LLLLLLLLLNLLAAAA",
+      "LLLLLLLLLNLLLAAA",
+      "LLLLLLLLLNLLAALL",
+      "NNNNNNNNNNNNANNN",
+      "LLLLLLAAALNLLLLL",
+      "LLLLLAALLLNLLLLL",
+      "AAAAAALLLLNLLLLL",
+      "ALLLLLLLLLNLLLLL",
+      "LLLLLLLLLLNLLLLL",
+      "NNNNNNNNNNNNNNNN",
+      "LLLLLLLLLLNLLLLL",
+      "LLLLLLLLLLNLLLAA",
+      "LLLLLLLLLLNLLLAL",
+      "NNNNNNNNNNNNNNNN",
+    ],
+    [
+      "LLLNLLLLLLLLLLLL",
+      "LAANLLLLLLLLLLLL",
+      "ALLNLLLLLLLLLLLL",
+      "LLLNLLLLLLLLLLLL",
+      "LLLNLLLLLLLLLLLL",
+      "NNNNNNNNNNNNNNNN",
+      "LLLNLLLLLLLLLLLN",
+      "LLLNLLLLLLLLLLLN",
+      "LLLNLLLPYPLLLLLN",
+      "LLLNLLLLPLLLLLLN",
+      "LLLLNLLggLLLLLLN",
+      "NNNNNNNNgggNNNNN",
+      "LLLLNLLLLLLLLLLN",
+      "LLLLNLLLLLLLLLLN",
+      "LLLLNLLLLLLLLLLN",
+      "NNNNNNNNNNNNNNNN",
+    ],
+    [
+      "NLLLLLLLALLNLLLL",
+      "NLLLLLAAALLNLLLL",
+      "NLAAAAALLLLNLLLL",
+      "NLLLLAAALLLNLLLL",
+      "NLLLLLLAALLNLLLL",
+      "NNNNNNNNNNNNNNNN",
+      "LLLLLLLLLLLNLLLL",
+      "LLLLLLLLLLLNLLLL",
+      "LLLLLLLLLLLNLLLL",
+      "LLLLLLLLLLLNLLLL",
+      "LLLLLLLLLLLNLLLL",
+      "NNNNNNNNNNNNNNNN",
+      "LLLLLLLLLLLNLLLL",
+      "LLLLLLLLLLLNLLLL",
+      "LLLLLLLLLLLNLLLL",
+      "NNNNNNNNNNNNNNNN",
+    ],
+  ],
+};
+
 // ---------- sprites ----------
 const sprCache = {};
 function makeSprite(art, over) {
@@ -1188,6 +1624,13 @@ function spr(name, over, key) {
     sprCache[k] = { r: s, l: flipCanvas(s) };
   }
   return sprCache[k];
+}
+function mossyTile(kind, h) {
+  const list = MOSSY[kind];
+  const i = h % list.length;
+  const k = 'mossy_' + kind + i;
+  if (!sprCache[k]) sprCache[k] = { r: makeSprite({ rows: list[i], pal: MOSSY_PAL }) };
+  return sprCache[k].r;
 }
 // size is how big a normal 16-pixel drawing would be. Bigger or smaller
 // drawings keep the same pixel size, so everything matches.
@@ -1537,7 +1980,7 @@ function hash(x, y) { let h = (x * 374761393 + y * 668265263) | 0; h = (h ^ (h >
 function renderTile(tx, ty) {
   const px = tx * T, py = ty * T;
   if (tile(tx, ty) === GATE) {
-    mapCtx.drawImage(spr('floor_a').r, px, py, T, T);
+    mapCtx.drawImage(mossyTile('floors', hash(tx, ty)), px, py, T, T);
     mapCtx.drawImage(spr('gate').r, px, py, T, T);
     return;
   }
@@ -1545,16 +1988,14 @@ function renderTile(tx, ty) {
   mapCtx.fillRect(px, py, T, T);
   const h = hash(tx, ty);
   if (isOpen(tx, ty)) {
-    mapCtx.drawImage(spr(h % 5 === 0 ? 'floor_b' : 'floor_a').r, px, py, T, T);
+    mapCtx.drawImage(mossyTile('floors', h), px, py, T, T);
     return;
   }
   let edge = false;
   for (let yy = -1; yy <= 1 && !edge; yy++) for (let xx = -1; xx <= 1; xx++) if (isOpen(tx + xx, ty + yy)) { edge = true; break; }
   if (!edge) return;
-  mapCtx.drawImage(spr('wall').r, px, py, T, T);
+  mapCtx.drawImage(mossyTile('walls', h), px, py, T, T);
   if (tile(tx, ty) === CRACK) { mapCtx.drawImage(spr('crack').r, px, py, T, T); return; }
-  if (h % 2 === 0) mapCtx.drawImage(spr('moss').r, px, py, T, T);
-  if (isOpen(tx, ty + 1) && h % 3 === 0) mapCtx.drawImage(spr('vines').r, px, py, T, T);
 }
 function renderMap() {
   mapCanvas = makeCanvas(MW * T, MH * T);
@@ -2763,9 +3204,7 @@ function drawHUD() {
 function drawMenuBackground() {
   for (let y = 0; y < 14; y++) for (let x = 0; x < 20; x++) {
     const wall = y < 2 || y > 11;
-    ctx.drawImage(spr(wall ? 'wall' : (hash(x, y) % 5 === 0 ? 'floor_b' : 'floor_a')).r, x * T, y * T, T, T);
-    if (wall && y === 1 && hash(x, y) % 2 === 0) ctx.drawImage(spr('vines').r, x * T, y * T, T, T);
-    if (wall && hash(x, y) % 3 === 0) ctx.drawImage(spr('moss').r, x * T, y * T, T, T);
+    ctx.drawImage(mossyTile(wall ? 'walls' : 'floors', hash(x, y)), x * T, y * T, T, T);
   }
   const g = ctx.createRadialGradient(W / 2, H / 2, 80, W / 2, H / 2, 560);
   g.addColorStop(0, 'rgba(0,0,0,0.25)');
@@ -2923,9 +3362,7 @@ function drawEnding() {
   for (let i = 0; i < 30; i++) { const x = (i * 173) % W, y = 490 + (i * 71) % 140; ctx.fillStyle = ['#ffffff', '#f0c83c', '#f07aa8'][i % 3]; ctx.fillRect(x, y, 8, 8); }
   // the dungeon you escaped from
   for (let gy = 0; gy < 6; gy++) for (let gx = 0; gx < 4; gx++) {
-    ctx.drawImage(spr('wall').r, 20 + gx * T, 182 + gy * T, T, T);
-    if (gy === 0 || gx === 0) ctx.drawImage(spr('vines').r, 20 + gx * T, 182 + gy * T, T, T);
-    ctx.drawImage(spr('moss').r, 20 + gx * T, 182 + gy * T, T, T);
+    ctx.drawImage(mossyTile('walls', hash(gx, gy)), 20 + gx * T, 182 + gy * T, T, T);
   }
   ctx.fillStyle = '#080a07'; ctx.fillRect(68, 374, 96, 96);
   // the knight runs free!
