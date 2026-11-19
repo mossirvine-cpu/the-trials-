@@ -1275,16 +1275,36 @@ const HAPPY_TUNE = [262, 330, 392, 523, 392, 330, 262, 0, 294, 349, 440, 587, 44
 let musicStep = 0, musicTimer = 0;
 // Background music: music.mp3 sits next to this file on GitHub.
 // To change the song, upload a different mp3 called music.mp3.
+// threat.mp3 fades in when you get attacked (and during boss fights),
+// then fades back to the normal music once you are safe again.
 const bgMusic = new Audio('music.mp3');
 bgMusic.loop = true;
+const threatMusic = new Audio('threat.mp3');
+threatMusic.loop = true;
+const THREAT_HOLD = 8;   // seconds of no attacks before the calm music comes back
+const FADE_SPEED = 1.2;  // how fast the songs swap (bigger = faster)
+let threatT = 0, threatMix = 0;
 function musicVolume() { return [0, 0.25, 0.5, 0.8][settings.volume]; }
+function underAttack() { threatT = THREAT_HOLD; }
+function playOrPause(a, on) {
+  if (on && a.paused) a.play().catch(() => {});
+  if (!on && !a.paused) a.pause();
+}
 function updateMusic(dt) {
   if (!actx) return; // waits until the first key press or click
   const happy = state === 'ending';
-  const wantBg = settings.music && !happy;
-  bgMusic.volume = musicVolume();
-  if (wantBg && bgMusic.paused) bgMusic.play().catch(() => {});
-  if (!wantBg && !bgMusic.paused) bgMusic.pause();
+  const inGame = state === 'play' || state === 'pause' || state === 'shop' || state === 'reading' || state === 'dead';
+  if (state === 'play') threatT = Math.max(0, threatT - dt);
+  if (!inGame) threatT = 0;
+  const bossFight = inGame && (arena === 'closing' || arena === 'fight');
+  const target = (threatT > 0 || bossFight) ? 1 : 0;
+  threatMix += Math.sign(target - threatMix) * Math.min(Math.abs(target - threatMix), FADE_SPEED * dt);
+  const v = musicVolume(), on = settings.music && !happy;
+  bgMusic.volume = v * (1 - threatMix);
+  threatMusic.volume = v * threatMix;
+  playOrPause(bgMusic, on && threatMix < 1);
+  playOrPause(threatMusic, on && threatMix > 0);
+  if (threatMix === 0 && threatMusic.currentTime > 0 && threatMusic.paused) threatMusic.currentTime = 0; // start fresh next time
   if (!happy || !settings.music) return;
   // the happy ending tune when you escape
   musicTimer -= dt;
@@ -1958,6 +1978,7 @@ function hurtPlayer(dmg, fx, fy) {
   const mult = [0.5, 1, 1.5][settings.difficulty];
   const d = Math.max(1, Math.round(dmg * mult));
   player.hp -= d;
+  underAttack();
   player.inv = 0.9;
   const dx = player.x - fx, dy = player.y - fy, l = Math.hypot(dx, dy) || 1;
   player.kbx = dx / l * 380; player.kby = dy / l * 380;
