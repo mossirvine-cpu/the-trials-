@@ -1217,15 +1217,25 @@ const SFX = {
 const DUNGEON_TUNE = [110, 0, 131, 0, 165, 0, 131, 0, 98, 0, 123, 0, 147, 0, 123, 0, 87, 0, 110, 0, 131, 0, 110, 0, 82, 0, 104, 0, 123, 0, 165, 0];
 const HAPPY_TUNE = [262, 330, 392, 523, 392, 330, 262, 0, 294, 349, 440, 587, 440, 349, 294, 0, 330, 392, 494, 659, 494, 392, 330, 0, 349, 440, 523, 698, 523, 440, 523, 0];
 let musicStep = 0, musicTimer = 0;
+// Background music: music.mp3 sits next to this file on GitHub.
+// To change the song, upload a different mp3 called music.mp3.
+const bgMusic = new Audio('music.mp3');
+bgMusic.loop = true;
+function musicVolume() { return [0, 0.25, 0.5, 0.8][settings.volume]; }
 function updateMusic(dt) {
-  if (!actx || !settings.music) return;
+  if (!actx) return; // waits until the first key press or click
+  const happy = state === 'ending';
+  const wantBg = settings.music && !happy;
+  bgMusic.volume = musicVolume();
+  if (wantBg && bgMusic.paused) bgMusic.play().catch(() => {});
+  if (!wantBg && !bgMusic.paused) bgMusic.pause();
+  if (!happy || !settings.music) return;
+  // the happy ending tune when you escape
   musicTimer -= dt;
   if (musicTimer > 0) return;
-  const happy = state === 'ending';
-  musicTimer = happy ? 0.14 : 0.2;
-  const tune = happy ? HAPPY_TUNE : DUNGEON_TUNE;
-  const n = tune[musicStep++ % tune.length];
-  if (n) tone(n, happy ? 0.12 : 0.18, happy ? 'square' : 'triangle', happy ? 0.15 : 0.3, 0, true);
+  musicTimer = 0.14;
+  const n = HAPPY_TUNE[musicStep++ % HAPPY_TUNE.length];
+  if (n) tone(n, 0.12, 'square', 0.15, 0, true);
 }
 
 // ---------- keyboard ----------
