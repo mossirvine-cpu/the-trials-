@@ -82,7 +82,8 @@ const PALETTE = {
 
 // =====================================================================
 // 2. PIXEL ART
-// Every drawing is 16 pixels wide and 16 rows tall.
+// Most drawings are 16 pixels wide and 16 rows tall. The monsters can be
+// any size, and every pixel is drawn the same size on screen.
 // Change the letters to change the picture. Save, refresh, and see it!
 // =====================================================================
 const ART = {
@@ -126,186 +127,391 @@ const ART = {
   ],
 
   // ---------- MONSTERS ----------
-  slime_a: [
-    "................",
-    "................",
-    "................",
-    "................",
-    "......KKKK......",
-    "....KK3311KK....",
-    "...K33111111K...",
-    "..K3111111111K..",
-    "..K11WK11WK11K..",
-    "..K11KK11KK11K..",
-    ".K111111111111K.",
-    ".K111122221111K.",
-    ".K122222222221K.",
-    ".K222222222222K.",
-    "..KKKKKKKKKKKK..",
-    "................",
-  ],
-  slime_b: [
-    "................",
-    "................",
-    "................",
-    "................",
-    "................",
-    "................",
-    "................",
-    ".....KKKKKK.....",
-    "...KK331111KK...",
-    "..K3311111111K..",
-    ".K11WK1111WK11K.",
-    ".K11KK1111KK11K.",
-    "K11111111111111K",
-    "K11112222221111K",
-    "K22222222222222K",
-    ".KKKKKKKKKKKKKK.",
-  ],
-  bat_a: [
-    "................",
-    "................",
-    "................",
-    ".K............K.",
-    ".KK..........KK.",
-    ".K1K..K..K..K1K.",
-    ".K11K.K11K.K11K.",
-    ".K111K1111K111K.",
-    ".K1111W11W1111K.",
-    ".K221111111122K.",
-    "..K22K1111K22K..",
-    "...KK.K22K.KK...",
-    ".......KK.......",
-    "................",
-    "................",
-    "................",
-  ],
-  bat_b: [
-    "................",
-    "................",
-    "................",
-    "................",
-    "................",
-    "......K..K......",
-    ".....K1KK1K.....",
-    "..KKK111111KKK..",
-    ".K111W1111W111K.",
-    "K11111111111111K",
-    "K122K111111K221K",
-    "KK..K122221K..KK",
-    ".....KKKKKK.....",
-    "................",
-    "................",
-    "................",
-  ],
-  spider_a: [
-    "................",
-    "................",
-    "................",
-    "................",
-    "......KKKK......",
-    ".....K1111K.....",
-    "..K.K1W11W1K.K..",
-    ".K.K11111111K.K.",
-    "K.KK11122111KK.K",
-    "..K.K112211K.K..",
-    ".K..K111111K..K.",
-    "K....KKKKKK....K",
-    "K...K......K...K",
-    "................",
-    "................",
-    "................",
-  ],
-  spider_b: [
-    "................",
-    "................",
-    "................",
-    "................",
-    "......KKKK......",
-    ".....K1111K.....",
-    "..K.K1W11W1K.K..",
-    ".K.K11111111K.K.",
-    ".KKK11122111KKK.",
-    "..K.K112211K.K..",
-    ".K..K111111K..K.",
-    ".K...KKKKKK...K.",
-    "..K.K......K.K..",
-    "................",
-    "................",
-    "................",
-  ],
-  skeleton_a: [
-    ".....KKKKK......",
-    "....KHHHHHK.....",
-    "...KHHHHHHHK....",
-    "...KHK1HK1HK....",
-    "...KHKKHKKHK....",
-    "...KHHHKHHHK....",
-    "....KHKHKHK.....",
-    ".....KKKKK......",
-    "....KhHHHhK.....",
-    "...KH.KHK.HK....",
-    "..KH..KHK..HK...",
-    "......KHK.......",
-    ".....KhHhK......",
-    ".....KH.HK......",
-    "....KH...HK.....",
-    "....KK...KK.....",
-  ],
-  skeleton_b: [
-    ".....KKKKK......",
-    "....KHHHHHK.....",
-    "...KHHHHHHHK....",
-    "...KHK1HK1HK....",
-    "...KHKKHKKHK....",
-    "...KHHHKHHHK....",
-    "....KHKHKHK.....",
-    ".....KKKKK......",
-    "....KhHHHhK.....",
-    "...KH.KHK.HK....",
-    "..KH..KHK..HK...",
-    "......KHK.......",
-    ".....KhHhK......",
-    "....KH..HK......",
-    "...KH....HK.....",
-    "...KK....KK.....",
-  ],
-  imp: [
-    "..K..........K..",
-    "..KK........KK..",
-    "...K1K....K1K...",
-    "...K11KKKK11K...",
-    "....K111111K....",
-    "...K1WK11WK1K...",
-    "...K11111111K...",
-    "...K11KKKK11K...",
-    "....K112211K....",
-    "..KK21111112KK..",
-    ".K2K11111111K2K.",
-    "..K.K111111K.K..",
-    "....K11KK11K....",
-    "....K1K..K1K....",
-    "....KK....KK....",
-    "................",
-  ],
-  ghost: [
-    "................",
-    ".....KKKKKK.....",
-    "....K111111K....",
-    "...K11111111K...",
-    "..K1111111111K..",
-    "..K11KK11KK11K..",
-    "..K11KK11KK11K..",
-    "..K1111111111K..",
-    "..K1111KK1111K..",
-    "..K111K22K111K..",
-    "..K1111KK1111K..",
-    "..K1111111111K..",
-    "..K2111111112K..",
-    "..K2211221122K..",
-    "..K2K22KK22K2K..",
-    "..KK.KK..KK.KK..",
-  ],
+  // Drawn by our game's creator in Piskel, copied exactly, pixel for pixel.
+  // His drawings can be any size. Each one has its own colour list (pal),
+  // so his exact colours are kept.
+  // THE GREEN MONSTER (16 x 16)
+  blob: {
+    pal: {
+      'a': '#b3ff00',
+      'b': '#1da343',
+      'c': '#a8e61d',
+      'e': '#ff7e00',
+      'f': '#ed1c24',
+      'g': '#990030',
+      'h': '#ffffff',
+    },
+    rows: [
+      ".....aaaaaaa....",
+      "....abcccccba...",
+      "...acbbbcbbbca..",
+      "..acbefebefebca.",
+      "..acbefebefebca.",
+      "..accbbbcbbbcca.",
+      "..accccccccccca.",
+      "..accccccccccca.",
+      "..acbghghghgbca.",
+      "..accbgggggbcca.",
+      "..acccbbbbbccca.",
+      "..accccccccccca.",
+      "..accccccccccca.",
+      ".acccaccccaccca.",
+      "accaa.acca.accca",
+      "acca..acca..aaca",
+    ],
+  },
+  // THE EYE BAT (19 x 9)
+  eyebat: {
+    pal: {
+      'a': '#9c5a3c',
+      'b': '#546d8e',
+      'c': '#6f3198',
+      'd': '#ffc20e',
+      'e': '#ed1c24',
+    },
+    rows: [
+      "......a.....a......",
+      ".......a...a.......",
+      ".bbbccc.aaa.cccbbb.",
+      "cabcbcccdddcccbcbac",
+      ".acacacddeddcacaca.",
+      "...acacddeddcaca...",
+      ".......cdddc.......",
+      ".......aa.aa.......",
+      ".......a...a.......",
+    ],
+  },
+  // THE WILD KID (10 x 10)
+  wildling: {
+    pal: {
+      'a': '#9c5a3c',
+      'b': '#523123',
+      'c': '#e5aa7a',
+      'd': '#000000',
+      'e': '#db9865',
+    },
+    rows: [
+      "..ababaa..",
+      "..babaaa..",
+      "..aaacac..",
+      "..cdccdc..",
+      "..cccccc..",
+      "..dccccd..",
+      "..cddddc..",
+      "...cccc...",
+      ".eeeeeeee.",
+      "ece....ece",
+    ],
+  },
+  // ---------- NEW MONSTERS FROM HIS ART SHEET ----------
+  // THE BLUE EYE BLOB (17 x 15)
+  blueBlob: {
+    pal: {
+      'a': '#9c5a3c',
+      'b': '#303e4f',
+      'c': '#546d8e',
+      'd': '#202a36',
+      'e': '#a8e61d',
+      'f': '#ff7e00',
+      'g': '#7a645b',
+      'h': '#523123',
+    },
+    rows: [
+      "....aa..aa.......",
+      "...bbbbbbbb......",
+      "..bcbccbcccb.....",
+      ".bcdddccbcccb....",
+      "bcdefedccbcccb...",
+      "bcdefedccbcccb...",
+      "bccdddcccbcccbg..",
+      "bcccbccccbcccbga.",
+      "bcccbccccbcccbgaa",
+      ".bcbccccbcccb....",
+      ".abccccbcccb.....",
+      "..gbbbbbbbba.....",
+      "..hhghgahah......",
+      "....g..g..g......",
+      "....g..g..g......",
+    ],
+  },
+  // THE SLIME MOUTH (21 x 15)
+  slime: {
+    pal: {
+      'a': '#185e2c',
+      'b': '#546d8e',
+      'c': '#000000',
+      'd': '#303e4f',
+      'e': '#ff7e00',
+      'f': '#ed1c24',
+      'g': '#22b14c',
+      'h': '#990030',
+      'i': '#65768a',
+      'j': '#a8e61d',
+    },
+    rows: [
+      "........aaaaa........",
+      ".......abbbbba.......",
+      "......abbccbdda......",
+      ".....addcefecdda.....",
+      ".....adgcefecdga.....",
+      ".....acgceeecgca.....",
+      ".....ahcgcccgcha.....",
+      ".....ah.ccccc.ia.....",
+      ".....ichh.h.hhii.....",
+      ".....iiiccccccii.....",
+      ".....aaiiiiiiiia.....",
+      "....ajgajaaajagja....",
+      "...ajgajajgjajagja...",
+      ".aajgajgaagaagjagjaa.",
+      "ajgjajga.aja.agjagjga",
+    ],
+  },
+  // THE FURBALL (13 x 15)
+  furball: {
+    pal: {
+      'a': '#523123',
+      'b': '#b37d54',
+      'c': '#546d8e',
+      'd': '#e5aa7a',
+      'e': '#ed1c24',
+      'f': '#303e4f',
+    },
+    rows: [
+      "....a.a.a....",
+      ".....aba.....",
+      "...aacabaa...",
+      "..acababada..",
+      ".acadaaadada.",
+      "adcaa.e.aadfa",
+      "afdaa...aacfa",
+      "afdadaaadacfa",
+      "affcddaddacfa",
+      ".accccadadba.",
+      "..ababababa..",
+      "...aaaaaaa...",
+      "....afaca....",
+      "....ababa....",
+      "...abbabba...",
+    ],
+  },
+  // THE HEDGEHOG (15 x 14)
+  hedgehog: {
+    pal: {
+      'a': '#996a48',
+      'b': '#b37d54',
+      'c': '#7a645b',
+      'd': '#523123',
+      'e': '#a8e61d',
+      'f': '#ff7e00',
+    },
+    rows: [
+      "....a..........",
+      "...aa..aa......",
+      "..aa..aa.......",
+      ".abbbbbbbc.....",
+      ".badabbbbbc....",
+      "aaefeabaabbc...",
+      "baefeaaababc...",
+      "abadaababacbb..",
+      "caaabbbcabacbbb",
+      "cbbaaaabbaacbb.",
+      ".cbbcbbaabc....",
+      "..cccccccc.....",
+      "...d..d.d......",
+      "...d..d.d......",
+    ],
+  },
+  // THE GIANT FLY (28 x 17)
+  fly: {
+    pal: {
+      'a': '#7a645b',
+      'b': '#b37d54',
+      'c': '#949494',
+      'd': '#bfbfbf',
+      'e': '#d1d1d1',
+      'f': '#575757',
+      'g': '#303e4f',
+      'h': '#65768a',
+      'i': '#a8e61d',
+      'j': '#ff7e00',
+      'k': '#4c5c6e',
+      'l': '#546d8e',
+      'm': '#996a48',
+      'n': '#990030',
+    },
+    rows: [
+      "abb.........................",
+      "...............cccc.........",
+      "..............cdddec........",
+      ".............cddddecf.......",
+      ".............cddeccdef......",
+      "............cddecdddef......",
+      "............cddcddeff.......",
+      "............cdecdef.........",
+      ".....aaag...cecdef..........",
+      "....abaghg.ggggefggggg......",
+      "...aijighhghkkhgghhhkkg.gg..",
+      "...aaabghhhkkkkkghkkkkkghkg.",
+      "..hlhambgghkkkkghhkkkkkggggg",
+      ".n..lmmaamgkkkkgggggggg.....",
+      "...n.....aagggg.............",
+      "..n......a.bbaa.............",
+      "............b.a.............",
+    ],
+  },
+  // THE GREAT EYE (101 x 36)
+  eyeking: {
+    pal: {
+      'a': '#db9865',
+      'b': '#b37d54',
+      'c': '#996a48',
+      'd': '#7a645b',
+      'e': '#6f3198',
+      'f': '#9e69c2',
+      'g': '#c38be8',
+      'h': '#9c5a3c',
+      'i': '#d1a88a',
+      'j': '#542175',
+      'k': '#b5a5d5',
+      'l': '#ff7e00',
+      'm': '#ffc20e',
+      'n': '#fff200',
+      'o': '#ed1c24',
+      'p': '#990030',
+    },
+    rows: [
+      ".abc............................................................................................dba..",
+      "aab..............................................................................................baa.",
+      "aa................................................................................................aa.",
+      "efe..........................................................................................c....eee",
+      "efeee........................................................................................b....eee",
+      "efggge....c............................h.....................h................................bgifjje",
+      "eggggfe...b............................hh...................hh...............................ggiiffje",
+      "ffkfeef...c............................hh...................hh.............................e.iikffjje",
+      "fiieefffggb............................hhh.................hhh........................c..eeeeefgfjjje",
+      "eikfjffiibbi...........................hhcc...............cchh........................c..jjjjjfgfjjje",
+      "egifjjffffifig...c......................hcbb.............bbch..........................bijjjjjeffjjee",
+      "eekejjjfeiijegg..b......................ccbaaba.......abaabcc.................b......iibgbjjjjegejjee",
+      "eefejjjjfikejjggibi......................cbagbbbaaaaabbbgabc...................b..eeeegkebjjjjefgeeje",
+      "eefejjjjfikfejffiiigggggg...........cc....baffeeeeeeeeefkab...................ii.ejjeeegejjejjjegfjje",
+      "ejffjjjjefkkfjjffiejeefkkkg...b......cb....bfeejjjjjjjeefb....cc.....c...eeefgikfejjjjegejjejjjeggjje",
+      ".jfejjjjjegkejjffiejjjeffkggggc.ggg...b...ggfejjjllljjjegfg..b......gibgefjeefkgeejjjjefejjjjjjefgfe.",
+      ".jffjjjjjefkejjffiijjejjjeeffffggffgggbggggfejjllmmmlljjgggggbieeeeefgfffjjjjekkejjjjjefeffjejjjfgfe.",
+      "..efejjjjjfejjjjegijjjjjjjejffggffffefkkfffejjlmmnonmmljjgefkkfejfffegffejjjjeggejjjjjjffffjjjjeefe..",
+      "..eie.jjjjffjjjjjgkejjeeeejjjffifffjjekifejjjlmnnnonnnmljgeekfejjjjfffffjjjjjefgjjeejjjeffjjjee.eie..",
+      "..eie...jeffjjjjjfgejjjjjjjjegiifffjjjekfjjjjlmnnoponnmljgeefejjjjjefkeejjjjjeffeeejjjjefejje...efe..",
+      "...e.....efejjjjjfgejjjjjjjjejieffjjjjeigjjjjlmnnoponnmljgeefejjjjjefeejjjejjjefeejjjjjjffje.........",
+      "...e.....efejjjjjefejjjjjjjjejiiffeejjeigjjjjlmnnoponnmljgeefejjejjefgeejejjjjeieeejejjeefe......e...",
+      ".........efej.jjjefejjjjejjjejeifjjjjjjkfjjjjlmnnnonnnmljeejeijjjjjjfieejejjjjeiejejjjefefe..........",
+      "..........ee...jjeffjjjjjjejjjkieejjjjjekejjjjlmmnonmmljjeejjiejjejjigeejejjjjefffjjje...............",
+      "................jjiijjjjjjjjjjkfeeejjjjekjjjjjjllmmmlljjeejjj.ejeeejfieejjjejjeffejee................",
+      "..................jijffjjjejeeeffeeeejee..aaeejjjllljjjeeaa....feeeefeeeeejjjefff.e..................",
+      "...................e...fffeeeeeggeeeeg...bbbaaeejjjjjeeaabbb....eeeeggeee...e........................",
+      ".........................gffeegfffffg...bbbbbbbaaa.aaabbbbbbb....gfggfee...e.........................",
+      "...........................gggffffgg...bbbbb.bbbb...bbbb.bbbbb....ffgfg..............................",
+      ".............................gffff.....bbb...bbb.....bbb...bbb....gggg...............................",
+      ".......................................bbc....bb.....bb....cbb.......................................",
+      ".......................................ccc....cc.....cc....ccc.......................................",
+      "........................................ccc....ch...hc....ccc........................................",
+      ".........................................chh....h...h....hhc.........................................",
+      "..........................................hhh...........hhh..........................................",
+      "............................................h...........h............................................",
+    ],
+  },
+  // THE STONE GOLEM (59 x 61)
+  golem: {
+    pal: {
+      'a': '#546d8e',
+      'b': '#4c5c6e',
+      'c': '#303e4f',
+      'd': '#7a645b',
+      'e': '#9c5a3c',
+      'f': '#202a36',
+      'g': '#38614f',
+      'h': '#996a48',
+      'i': '#949494',
+      'j': '#b4b4b4',
+      'k': '#464646',
+      'l': '#b37d54',
+      'm': '#65768a',
+      'n': '#db9865',
+      'o': '#d1d1d1',
+      'p': '#990030',
+      'q': '#2f3699',
+      'r': '#d1a88a',
+      's': '#523123',
+      't': '#185e2c',
+      'u': '#1da343',
+      'v': '#b3ff00',
+      'w': '#ff7e00',
+      'x': '#ffc20e',
+      'y': '#ed1c24',
+      'z': '#fff200',
+    },
+    rows: [
+      "............................................a..............",
+      "...........................................ba..............",
+      "...........................................ba..............",
+      "...........................................ba..............",
+      "...........................................ba..............",
+      "...........................................ba..............",
+      "...........................................ba..............",
+      "...........................................ba..............",
+      "...........................................ba..............",
+      "...........................................ba..............",
+      "...........................................ba..............",
+      "...........................................ba..............",
+      "...........................................ba..............",
+      "...........................................ba..............",
+      "...........................................ba.c............",
+      "..........................................cccc.............",
+      "..................d.......d.e..............fb..............",
+      ".................dd.....ddd.ee.............bf..............",
+      "...............ddd.....dd....ee............fb..............",
+      "e.............ddd....gddd.....ee...........bf..............",
+      ".e...........ddhd...ddgdd...iijji.........fff..............",
+      "..ekk.......hhhhd..hhhhhd...ijjjje.........................",
+      "..kjj......hhghh..hhhlhh.....gijge.........................",
+      "..kjji....lggll..llllll.......ggg..........................",
+      "....gjg.ccccccccccccccccccccccccccccccc....................",
+      ".....iggcgbbcaaaaacamaaaaacaaaaaaaaacbc..............n.....",
+      "......ccggggcaggaacaaaaaaacaaaamambacbccc...........n.n....",
+      "......cggacggaaaaacaaaamaagccaaaaaaacbbbc..........non.....",
+      "....cccgggcaaaaaaacaaambmaaacaaabgaacccbcccc.......pn......",
+      "....caagaacaabmaaacmmaaaaaaacaaamaaaaacbbbbc......q........",
+      "..cccaagcccaaaaacccaaaaaaaaaccccaagmaacaaabcccc..p.........",
+      "..caaaaacaaaaaaccccaaaaaaaaaaaacaambmacaaaaaaac.q..........",
+      "..caaaaacaaaaaccrccaaaaaabmaaaacaaaaaaccccaaaggp...........",
+      "..cabmcccaacccclscccccaaaabmaaaccaaaaaaaacaaaggcc..........",
+      "..caaacaaacctuuvuutttccaaabmaaaacmbmaaaaaccagaagb.....nnn..",
+      "..caaacaaccttuvwwwuuttccaaaaaaaacaaaaaaaaacaaagggpqpqp.....",
+      "..cbmacaactuuuvxyxvuuttcaaabmaaacaaaaaaaaacaabmgg.....nnn..",
+      "..caaacaactuuvzxyxzvuutcabmaaaamcaaaaaaaaacaaaaab..........",
+      "..caaacbmctuvvzxyxzvvutcaaaaaaaacmaaaabmaacaamaac..........",
+      "..caaacaactuvvvxyxvvvutcaaaaaaaacaaabmaaaacaaaaac..........",
+      "..cbaacaactuuvvxyxvvuutcaaaabmaacaaaaaaaaccaaaaac..........",
+      "..cbaacaacttuuvwwwvuuttcaaaamaaacaaaabmaacaaaaabchh........",
+      "..cbmacaacctuuvvuuuuttccaaaaaaaacaaaaaaaacabbaabchl........",
+      "..cbaacaaacctuvuuttttccaabmaaaaccaaaaaacccammabgcllh.......",
+      "..cbbacccaaccsssccccccaaaaaaaaacaaabmaacaaaaaabbcgllll.....",
+      "..cbbbaacaaacclcacabmaaaaaaaaaacaaaaaaacaaaaagbbcghhhlll...",
+      "..cbgbbbcaaaacrcagaaaaaaaambmcccaaaaaaacaaaabbbbcghllhhhllh",
+      "..cffccbccccaccaacaagaaabaaaacaaaaaaaaacaaaabmccchh........",
+      "....ffccbbbcaacabcbbbggbbaaaabbmbbbbacccaagbbbc............",
+      "....fffccbbcgmbbbcbmbmbgbbbcccbbbbbbbcbbgbbbccc............",
+      "....hhffccccbbccccbbbbccccccbbccccccbcbbbcccc..............",
+      ".....hfffcccccfcccccbbffffccccfffcccccccccdh...............",
+      ".....ldddgdffffffffffffffffffffffffffffffcdh...............",
+      ".....hhllhhgdggggfhhhhhggggddddgddggghhhghhh...............",
+      ".......hhlllllggllhhhhldggdlllghhhhglllllll................",
+      ".........hhhhlgghhllllllgllhlllhllllhllh...................",
+      "..........hhhhh...hhh..hhhh..hhhh...hhhh...................",
+      "..........hh......hh....hhh...hhh....hh....................",
+      "..........hh.....hh.....hh....hh.....hh....................",
+      "..........hh.....hh.....hh....hh.....hh....................",
+      "..........hh.....hh.....hh.....h...........................",
+    ],
+  },
 
   // ---------- THE SHOPKEEPER ----------
   merchant: [
@@ -773,24 +979,34 @@ const POTIONS = {
 const WARDEN_COLORS = { S: '#4a4a5a', D: '#2a2a36', W: '#8a8aa0', F: '#1a0a0a', E: '#ff3a3a', R: '#9b59d0', r: '#5e2d8a', Y: '#d83a3a' };
 
 const MONSTERS = {
-  slime:    { frames: ['slime_a', 'slime_b'],       hp: 3, dmg: 1, speed: 70,  ai: 'hop',     hit: 34,
-              schemes: [['#6fd64f','#3f9a2e','#c4f7a8'], ['#4fb0e8','#2a6f9e','#b8e6ff'], ['#f07aa8','#b0406a','#ffd0e2'], ['#a46be0','#6a3aa0','#dcc4ff'], ['#f0703a','#a0301a','#ffc090']] },
-  bat:      { frames: ['bat_a', 'bat_b'],           hp: 2, dmg: 1, speed: 125, ai: 'flutter', hit: 30, flying: true,
-              schemes: [['#6a4a8a','#3a2a4e','#c040c0'], ['#6a4a30','#3a2618','#e05050'], ['#3a3a48','#1e1e28','#40e0e0']] },
-  spider:   { frames: ['spider_a', 'spider_b'],     hp: 4, dmg: 1, speed: 115, ai: 'chase',   hit: 34,
-              schemes: [['#4a3a5a','#2a2036','#e04040'], ['#6a5a2a','#3a2c0f','#f0d040'], ['#2a5a3a','#14301e','#60f060']] },
-  skeleton: { frames: ['skeleton_a', 'skeleton_b'], hp: 7, dmg: 2, speed: 75,  ai: 'chase',   hit: 32,
-              schemes: [['#ff4040'], ['#40c0ff'], ['#60ff60']] },
-  imp:      { frames: ['imp', 'imp'],               hp: 4, dmg: 1, speed: 65,  ai: 'shooter', hit: 32, flying: true,
-              schemes: [['#d84a3a','#8a2418','#ffffff'], ['#8a4ad8','#4a1e8a','#ffffff'], ['#3a9a5a','#1a5a30','#ffffff']] },
-  ghost:    { frames: ['ghost', 'ghost'],           hp: 6, dmg: 2, speed: 80,  ai: 'phase',   hit: 34, flying: true,
-              schemes: [['#dfe8f0','#9aaabb','#ffffff'], ['#c8f0e0','#80b8a0','#ffffff'], ['#e8d0f0','#a888c0','#ffffff']] },
-  warden:   { frames: ['knight_a', 'knight_b'],     hp: 280, dmg: 4, speed: 95, ai: 'chase',  hit: 110,
+  // own: true means it is his own drawing, never recoloured or changed.
+  // color = the colour of the splats when you hit it.
+  blob:     { frames: ['blob', 'blob'],         own: true, hp: 3, dmg: 1, speed: 70,  ai: 'hop',     hit: 40, color: '#a8e61d' },
+  eyeBat:   { frames: ['eyebat', 'eyebat'],     own: true, hp: 2, dmg: 1, speed: 125, ai: 'flutter', hit: 40, color: '#6f3198', flying: true },
+  wildKid:  { frames: ['wildling', 'wildling'], own: true, hp: 4, dmg: 1, speed: 100, ai: 'chase',   hit: 30, color: '#e5aa7a' },
+  // 2nd level monsters
+  blueBlob: { frames: ['blueBlob', 'blueBlob'], own: true, hp: 4, dmg: 1, speed: 80,  ai: 'hop',     hit: 40, color: '#546d8e' },
+  slime:    { frames: ['slime', 'slime'],       own: true, hp: 5, dmg: 1, speed: 65,  ai: 'chase',   hit: 44, color: '#22b14c' },
+  furball:  { frames: ['furball', 'furball'],   own: true, hp: 4, dmg: 1, speed: 115, ai: 'chase',   hit: 36, color: '#b37d54' },
+  hedgehog: { frames: ['hedgehog', 'hedgehog'], own: true, hp: 5, dmg: 1, speed: 95,  ai: 'chase',   hit: 40, color: '#996a48' },
+  fly:      { frames: ['fly', 'fly'],           own: true, hp: 3, dmg: 1, speed: 140, ai: 'flutter', hit: 44, color: '#65768a', flying: true },
+  // bosses. px = how big each of his pixels is on screen.
+  // hitW/hitH = the size of the boss's body for hitting it.
+  // minion = the monster it calls for help.
+  eyeKing:  { frames: ['eyeking', 'eyeking'],   own: true, hp: 30, dmg: 2, speed: 60, ai: 'chase', hit: 90, hitW: 290, hitH: 90,  px: 3, color: '#6f3198', flying: true, minion: 'eyeBat' },
+  golem:    { frames: ['golem', 'golem'],       own: true, hp: 40, dmg: 2, speed: 50, ai: 'chase', hit: 110, hitW: 140, hitH: 110, px: 3, drawY: -26, color: '#546d8e', minion: 'blueBlob' },
+  warden:   { frames: ['knight_a', 'knight_b'], hp: 280, dmg: 4, speed: 95, ai: 'chase',  hit: 110,
               schemes: [[]], colors: WARDEN_COLORS },
 };
 
-// Which monsters appear first. Deeper dungeons unlock more of the list.
-const MONSTER_ORDER = ['slime', 'bat', 'spider', 'skeleton', 'imp', 'ghost'];
+const MONSTER_ORDER = ['blob', 'eyeBat', 'wildKid', 'blueBlob', 'slime', 'furball', 'hedgehog', 'fly'];
+// Which monsters live in which dungeon. Dungeon 1 = his 1st level monsters,
+// dungeon 2 = his 2nd level monsters, after that everyone is mixed in.
+function monstersFor(d) {
+  if (d === 1) return ['blob', 'eyeBat', 'wildKid'];
+  if (d === 2) return ['blueBlob', 'slime', 'furball'];
+  return MONSTER_ORDER;
+}
 
 
 // =====================================================================
@@ -804,16 +1020,16 @@ const DUNGEON_NAMES = [
 ];
 
 const BOSSES = [
-  { name: 'King Jelly',        type: 'slime',    scheme: 0, buddy: 'Jelly Buddy' },
-  { name: 'The Bat Queen',     type: 'bat',      scheme: 0, buddy: 'Bat Pal' },
-  { name: 'Mother Spider',     type: 'spider',   scheme: 0, buddy: 'Spidey' },
-  { name: 'The Bone Baron',    type: 'skeleton', scheme: 0, buddy: 'Little Bones' },
-  { name: 'The Imp Lord',      type: 'imp',      scheme: 0, buddy: 'Impy' },
-  { name: 'The Wailing Ghost', type: 'ghost',    scheme: 0, buddy: 'Boo' },
-  { name: 'Lava Jelly',        type: 'slime',    scheme: 4, buddy: 'Lava Buddy' },
-  { name: 'The Bone Emperor',  type: 'skeleton', scheme: 1, buddy: 'Frosty Bones' },
-  { name: 'The Shadow Imp',    type: 'imp',      scheme: 1, buddy: 'Shade' },
-  { name: 'THE WARDEN',        type: 'warden',   scheme: 0, final: true },
+  { name: 'The Great Eye',      type: 'eyeKing', scheme: 0, buddy: 'Batty', buddyType: 'eyeBat' },
+  { name: 'The Stone Golem',    type: 'golem',   scheme: 0, buddy: 'Blinky', buddyType: 'blueBlob' },
+  { name: 'The Wild Chief',     type: 'wildKid', scheme: 0, buddy: 'Little Wild' },
+  { name: 'Mega Blob',          type: 'blob',    scheme: 0, buddy: 'Blobbo' },
+  { name: 'The All-Seeing Bat', type: 'eyeBat',  scheme: 0, buddy: 'Peeper' },
+  { name: 'The Wild King',      type: 'wildKid', scheme: 0, buddy: 'Scamp' },
+  { name: 'The Giant Blob',     type: 'blob',    scheme: 0, buddy: 'Gloop' },
+  { name: 'Night Wings',        type: 'eyeBat',  scheme: 0, buddy: 'Flap' },
+  { name: 'The Last Wild One',  type: 'wildKid', scheme: 0, buddy: 'Rascal' },
+  { name: 'THE WARDEN',         type: 'warden',  scheme: 0, final: true },
 ];
 
 
@@ -856,15 +1072,20 @@ function removeKey(k) { try { localStorage.removeItem(k); } catch (e) {} }
 
 // ---------- sprites ----------
 const sprCache = {};
-function makeSprite(rows, over) {
-  const c = makeCanvas(16, 16);
+function makeSprite(art, over) {
+  const own = !Array.isArray(art);
+  const rows = own ? art.rows : art;
+  const pal = own ? art.pal : PALETTE;
+  const w = own ? Math.max(...rows.map(r => r.length)) : 16;
+  const h = own ? rows.length : 16;
+  const c = makeCanvas(w, h);
   const x = c.getContext('2d');
-  for (let j = 0; j < 16; j++) {
+  for (let j = 0; j < h; j++) {
     const row = rows[j] || '';
-    for (let i = 0; i < 16; i++) {
+    for (let i = 0; i < w; i++) {
       const ch = row[i];
       if (!ch || ch === '.' || ch === ' ') continue;
-      const col = (over && over[ch]) || PALETTE[ch];
+      const col = (over && over[ch]) || pal[ch];
       if (!col) continue;
       x.fillStyle = col;
       x.fillRect(i, j, 1, 1);
@@ -873,9 +1094,9 @@ function makeSprite(rows, over) {
   return c;
 }
 function flipCanvas(c) {
-  const f = makeCanvas(16, 16);
+  const f = makeCanvas(c.width, c.height);
   const x = f.getContext('2d');
-  x.translate(16, 0); x.scale(-1, 1); x.drawImage(c, 0, 0);
+  x.translate(c.width, 0); x.scale(-1, 1); x.drawImage(c, 0, 0);
   return f;
 }
 function spr(name, over, key) {
@@ -886,12 +1107,18 @@ function spr(name, over, key) {
   }
   return sprCache[k];
 }
+// size is how big a normal 16-pixel drawing would be. Bigger or smaller
+// drawings keep the same pixel size, so everything matches.
 function drawSpr(s, x, y, size, flip) {
-  ctx.drawImage(flip ? s.l : s.r, Math.round(x - size / 2), Math.round(y - size / 2), size, size);
+  const img = flip ? s.l : s.r;
+  const ps = size / 16;
+  const w = (img.width || 16) * ps, h = (img.height || 16) * ps;
+  ctx.drawImage(img, Math.round(x - w / 2), Math.round(y - h / 2), w, h);
 }
 function monsterSprite(type, scheme, frame) {
   const M = MONSTERS[type];
   const name = M.frames[frame % M.frames.length];
+  if (M.own) return spr(name, null, type);
   let over;
   if (M.colors) over = M.colors;
   else { const s = M.schemes[scheme] || M.schemes[0]; over = { '1': s[0], '2': s[1] || s[0], '3': s[2] || s[0] }; }
@@ -1104,7 +1331,7 @@ function genDungeon(d) {
   shopObj = { x: (startRoom.x + startRoom.w / 2) * T, y: (startRoom.y + 1.3) * T, w: 60, h: 60 };
 
   // monsters, chests and secret rooms
-  const types = MONSTER_ORDER.slice(0, Math.min(6, 1 + Math.ceil(d * 0.7)));
+  const types = monstersFor(d);
   for (const r of mids) {
     const n = Math.min(9, 2 + Math.floor(d * 0.6) + R(0, 2));
     for (let i = 0; i < n; i++) {
@@ -1206,7 +1433,7 @@ function breakCrack(tx, ty) {
 // ---------- monsters ----------
 function spawnMonster(type, x, y, d, scheme) {
   const M = MONSTERS[type];
-  if (scheme === undefined) scheme = Math.floor(Math.random() * M.schemes.length);
+  if (scheme === undefined) scheme = M.schemes ? Math.floor(Math.random() * M.schemes.length) : 0;
   const m = {
     type, scheme, x, y, w: M.hit, h: M.hit,
     hp: M.hp * (1 + 0.4 * (d - 1)), dmg: M.dmg + Math.floor((d - 1) / 3), speed: M.speed * (1 + 0.04 * (d - 1)),
@@ -1220,7 +1447,9 @@ function spawnBoss(d) {
   const B = BOSSES[d - 1];
   const m = spawnMonster(B.type, (bossRoom.x + bossRoom.w / 2) * T, (bossRoom.y + bossRoom.h / 2) * T, d, B.scheme);
   m.boss = true; m.final = !!B.final; m.name = B.name;
-  m.w = m.h = B.final ? 100 : 104;
+  const BM = MONSTERS[B.type];
+  m.w = BM.hitW || (B.final ? 100 : 104);
+  m.h = BM.hitH || (B.final ? 100 : 104);
   m.hp = m.maxHp = B.final ? 280 : Math.round(30 * (1 + 0.6 * (d - 1)));
   m.dmg = 2 + Math.floor(d / 2);
   m.speed = B.final ? 95 : 55 + d * 4;
@@ -1230,6 +1459,7 @@ function spawnBoss(d) {
 }
 function monsterColor(m) {
   const M = MONSTERS[m.type];
+  if (M.own) return M.color;
   if (M.colors) return '#9b59d0';
   if (m.type === 'skeleton') return '#ece4cc';
   return (M.schemes[m.scheme] || M.schemes[0])[0];
@@ -1334,7 +1564,7 @@ function updateBoss(m, dt, dx, dy, dd) {
       const inside = monsters.filter(o => !o.boss && inRoom(o, bossRoom)).length;
       if (inside < 6) {
         for (let i = 0; i < 2; i++) {
-          const type = m.type === 'warden' ? pick(MONSTER_ORDER) : m.type;
+          const type = MONSTERS[m.type].minion || (m.type === 'warden' ? pick(MONSTER_ORDER) : m.type);
           const o = spawnMonster(type, m.x + rnd(-60, 60), m.y + rnd(-60, 60), dungeon);
           if (boxSolid(o.x, o.y, o.w, o.h)) { o.x = m.x; o.y = m.y; }
         }
@@ -1452,7 +1682,7 @@ function openChest(c) {
     spawnItem('heart', x, y);
     const B = BOSSES[d - 1];
     if (B.buddy) {
-      companions.push({ type: B.type, scheme: B.scheme, name: B.buddy, dmg: 1 + d * 0.7, x: c.x, y: c.y, w: 26, h: 26, cd: 0, t: Math.random() * 5, face: 1 });
+      companions.push({ type: B.buddyType || B.type, scheme: B.scheme, name: B.buddy, dmg: 1 + d * 0.7, x: c.x, y: c.y, w: 26, h: 26, cd: 0, t: Math.random() * 5, face: 1 });
       showBanner(B.buddy + ' joined your team!', 3.5);
     }
     return;
@@ -1695,7 +1925,7 @@ function continueGame() {
   player = newPlayer();
   player.maxHp = s.maxHp; player.hp = s.maxHp; player.coins = s.coins; player.scrap = s.scrap;
   player.weapons = s.weapons || []; player.wi = s.wi || 0; player.potions = s.potions || player.potions;
-  companions = (s.companions || []).map(c => Object.assign({ x: 0, y: 0, w: 26, h: 26, cd: 0, t: Math.random() * 5, face: 1 }, c));
+  companions = (s.companions || []).filter(c => MONSTERS[c.type]).map(c => Object.assign({ x: 0, y: 0, w: 26, h: 26, cd: 0, t: Math.random() * 5, face: 1 }, c));
   genDungeon(dungeon);
   state = 'intro'; introT = 0;
 }
@@ -2041,15 +2271,17 @@ function drawMonster(m) {
   const M = MONSTERS[m.type];
   let frame = Math.floor(m.t * 5) % 2;
   if (m.ai === 'hop') frame = (m.t * 1.6) % 1 < 0.5 ? 0 : 1;
-  const size = m.boss ? (m.final ? 150 : 144) : 48;
-  const bob = (m.type === 'imp' || m.type === 'ghost') ? Math.sin(m.t * 4) * 4 : 0;
+  const size = M.px ? M.px * 16 : m.boss ? (m.final ? 150 : 144) : 48;
+  // his monsters keep their drawing and move by bouncing and bobbing
+  let bob = 0;
+  if (M.own) bob = M.flying ? Math.sin(m.t * 9) * 5 : (m.moving ? -Math.abs(Math.sin(m.t * (m.ai === 'hop' ? 6 : 11))) * (m.ai === 'hop' ? 12 : 5) : 0);
   const flip = player.x < m.x;
   if (m.type === 'ghost') ctx.globalAlpha = 0.8;
   if (m.flash > 0) ctx.globalAlpha = 0.45;
-  if (m.boss && m.charge > 0) { ctx.fillStyle = 'rgba(255,60,60,0.25)'; ctx.fillRect(m.x - size / 2, m.y - size / 2, size, size); }
-  drawSpr(monsterSprite(m.type, m.scheme, frame), m.x, m.y - (m.boss ? 10 : 4) + bob, size, flip);
+  if (m.boss && m.charge > 0) { ctx.fillStyle = 'rgba(255,60,60,0.25)'; ctx.fillRect(m.x - m.w / 2, m.y - m.h / 2, m.w, m.h); }
+  drawSpr(monsterSprite(m.type, m.scheme, frame), m.x, m.y - (m.boss ? 10 : 4) + (M.drawY || 0) + bob, size, flip);
   ctx.globalAlpha = 1;
-  if (m.slowT > 0) { ctx.fillStyle = 'rgba(138,224,255,0.3)'; ctx.fillRect(m.x - size / 2, m.y - size / 2, size, size); }
+  if (m.slowT > 0) { ctx.fillStyle = 'rgba(138,224,255,0.3)'; ctx.fillRect(m.x - m.w / 2, m.y - m.h / 2, m.w, m.h); }
   if (!m.boss && m.hp < m.maxHp) {
     ctx.fillStyle = '#1b1b24'; ctx.fillRect(m.x - 18, m.y - 34, 36, 6);
     ctx.fillStyle = '#d94a4a'; ctx.fillRect(m.x - 17, m.y - 33, 34 * Math.max(0, m.hp / m.maxHp), 4);
@@ -2171,7 +2403,7 @@ function drawMenu() {
   const bob = Math.sin(time * 3) * 6;
   drawSpr(spr(Math.floor(time * 4) % 2 ? 'knight_a' : 'knight_b'), 190, 400 + bob, 160);
   const hop = Math.abs(Math.sin(time * 3)) * 30;
-  drawSpr(monsterSprite('slime', 1, hop > 15 ? 0 : 1), W - 190, 420 - hop, 140, true);
+  drawSpr(monsterSprite('blob', 0, 0), W - 190, 420 - hop, 140, true);
   const opts = menuOptions();
   opts.forEach((o, i) => {
     const sel = i === menuIndex;
